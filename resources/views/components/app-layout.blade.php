@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
     <script src="//unpkg.com/alpinejs" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield("title", "Recipe Sharing Platform")</title>
+    <title>@yield("title", "TechnyURecipe")</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,99 +1,74 @@
 @extends("layouts.app")
 
-@section("title", "Welcome to TechnyURecipe")
+@section("title", "Dashboard")
 
-<x-app-layout>
+@section("content")
+<x-dashboard-navbar />
+<x-recipehero />
 
-<nav class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="{{ route('dashboard') }}" class="text-3xl font-extrabold tracking-tight">Dashboard</a>
+<div class="container mt-5">
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Hello, {{ Auth::user()->name }} 👋</h2>
+        <p class="text-gray-600">Welcome back to your dashboard. Here’s a quick overview of your activity.</p>
+    </div>
 
-        <div class="space-x-6 text-lg">
-            <!-- <a href="{{ route('recipes.index') }}" class="hover:underline hover:text-gray-200">Recipes</a>
-            <a href="{{ route('categories.index') }}" class="hover:underline hover:text-gray-200">Categories</a>
-            <a href="{{ route('profile.edit') }}" class="hover:underline hover:text-gray-200">Profile</a> -->
-
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="hover:underline hover:text-gray-200">Logout</button>
-            </form>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="p-4 bg-white shadow rounded-lg border">
+            <h3 class="text-xl font-semibold text-gray-700">Total Recipes</h3>
+            <p class="text-3xl font-bold text-green-600">{{ $recipes->count() }}</p>
+        </div>
+        <div class="p-4 bg-white shadow rounded-lg border">
+            <h3 class="text-xl font-semibold text-gray-700">Likes Received</h3>
+            <p class="text-3xl font-bold text-blue-600">{{ $recipes->sum(fn($r) => $r->likes->count()) }}</p>
+        </div>
+        <div class="p-4 bg-white shadow rounded-lg border">
+            <h3 class="text-xl font-semibold text-gray-700">Comments</h3>
+            <p class="text-3xl font-bold text-purple-600">{{ $recipes->sum(fn($r) => $r->comments->count()) }}</p>
         </div>
     </div>
-</nav>
 
-<div class="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-800 dark:to-gray-900">
-
-    <aside class="w-72 bg-white dark:bg-gray-800 p-6 hidden md:block shadow-xl">
-        <h2 class="text-2xl font-bold text-indigo-700 mb-6">Account Settings</h2>
-        <ul class="space-y-4 text-lg">
-            <li><a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-indigo-500">Update Profile</a></li>
-            <li><a href="{{ route('password.update') }}" class="text-gray-700 hover:text-indigo-500">Update Password</a></li>
-            <li><a href="#" onclick="openModal()" class="text-red-600 hover:underline">Delete Account</a></li>
-        </ul>
-    </aside>
-
-
-    <main class="flex-1 p-10">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-10">
-            <h2 class="text-4xl font-extrabold text-indigo-600 mb-4">Welcome to Your Dashboard</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Manage your recipes, categories, and profile from one place.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             
-                <div class="bg-gradient-to-r from-indigo-200 to-indigo-400 text-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-2xl font-bold">Your Recipes</h3>
-                    <p class="mt-2">View and update your recipe collections.</p>
-                    <a href="{{ route('recipes.index') }}" class="mt-4 inline-block bg-white text-indigo-700 px-4 py-2 rounded hover:bg-indigo-100 font-semibold">View Recipes</a>
-                </div>
-
-                <div class="bg-gradient-to-r from-green-200 to-green-400 text-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-2xl font-bold">Categories</h3>
-                    <p class="mt-2">Sort your recipes into helpful categories.</p>
-                    <a href="{{ route('categories.index') }}" class="mt-4 inline-block bg-white text-green-700 px-4 py-2 rounded hover:bg-green-100 font-semibold">View Categories</a>
-                </div>
-
-                <div class="bg-gradient-to-r from-purple-200 to-purple-400 text-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-2xl font-bold">Your Profile</h3>
-                    <p class="mt-2">Keep your profile up to date.</p>
-                    <a href="{{ route('profile.edit') }}" class="mt-4 inline-block bg-white text-purple-700 px-4 py-2 rounded hover:bg-purple-100 font-semibold">Edit Profile</a>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<div id="deleteAccountModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
-    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        <h2 class="text-2xl font-bold text-red-600 mb-4">Confirm Account Deletion</h2>
-        <p class="text-gray-700 mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
-
-        <form method="POST" action="{{ route('profile.destroy') }}">
-            @csrf
-            @method('DELETE')
-
-            <div class="mb-4">
-                <label for="password" class="block font-semibold">Enter Password</label>
-                <input type="password" name="password" id="password" required class="mt-2 w-full p-3 border border-gray-300 rounded-lg">
-            </div>
-
-            <div class="flex justify-between">
-                <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
-            </div>
-        </form>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-3xl font-bold text-gray-800">My Recipes</h1>
+        <a href="{{ route('recipes.create') }}" class="btn btn-success shadow">
+            <i class="bi bi-plus-circle"></i> Add New Recipe
+        </a>
     </div>
+
+    @if ($recipes->isEmpty())
+        <div class="alert alert-info">
+            You haven't created any recipes yet.
+        </div>
+    @else
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach ($recipes as $recipe)
+                <div class="card shadow-sm rounded-lg overflow-hidden border border-gray-200">
+                    @if ($recipe->image)
+                        <img src="{{ asset('storage/' . $recipe->image) }}" alt="{{ $recipe->title }}" class="w-full h-48 object-cover">
+                    @endif
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-xl font-semibold text-gray-900">{{ $recipe->title }}</h5>
+                        <p class="card-text text-gray-600 mt-2">{{ Str::limit($recipe->description, 100) }}</p>
+                        <div class="text-sm text-gray-500 mt-2 flex justify-between">
+                            <span><i class="bi bi-heart-fill text-red-500"></i> {{ $recipe->likes->count() }} Likes</span>
+                            <span><i class="bi bi-chat-dots-fill text-indigo-500"></i> {{ $recipe->comments->count() }} Comments</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white p-3 flex justify-between border-t border-gray-200">
+                        <a href="{{ route('recipes.edit', $recipe) }}" class="btn btn-sm btn-primary flex items-center gap-1">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                        <form action="{{ route('recipes.destroy', $recipe) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this recipe?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger flex items-center gap-1">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
 </div>
-
-<script>
-    function openModal() {
-        document.getElementById('deleteAccountModal').classList.remove('hidden');
-        document.getElementById('deleteAccountModal').classList.add('flex');
-    }
-
-    function closeModal() {
-        document.getElementById('deleteAccountModal').classList.remove('flex');
-        document.getElementById('deleteAccountModal').classList.add('hidden');
-    }
-</script>
-
-</x-app-layout>
+<x-footer />
+@endsection

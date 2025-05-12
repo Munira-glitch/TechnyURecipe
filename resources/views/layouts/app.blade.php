@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @vite(["resources/css/app.css", "resources/js/app.js"])
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+
     
 </head>
 
