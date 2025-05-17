@@ -10,46 +10,46 @@ class Recipe extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'title',
-        'description',
-        'ingredients',
-        'instructions',
-        'category_id',
-        'image',
+        "user_id",
+        "title",
+        "description",
+        "ingredients",
+        "instructions",
+        "category_id",
+        "image",
     ];
 
     protected $casts = [
-        'ingredients' => 'array', 
+        "ingredients" => "array",
     ];
 
-    // Relationship: Each recipe belongs to one user (author)
+    // Relationship: Recipe belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relationship: Each recipe may belong to a category
+    // Relationship: Recipe belongs to a category
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    // Relationship: A recipe can have many likes
+    // Relationship: Recipe has many likes
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
-    // Relationship: A recipe can have many comments
+    // Relationship: Recipe has many comments
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
-    // Check if a user has liked a recipe
-    public function isLikedBy(User $user)
+    // Helper: Check if a recipe is liked by a user
+    public function isLikedBy(?User $user): bool
     {
-        return $this->likes()->where('user_id', $user->id)->exists();
+        return $user ? $this->likes()->where("user_id", $user->id)->exists() : false;
     }
 }

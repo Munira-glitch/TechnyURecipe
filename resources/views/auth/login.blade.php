@@ -1,68 +1,221 @@
 <x-guest-layout>
-    <div class="flex min-h-screen items-center justify-center px-6 py-12 lg:px-8">
-        <div class="w-full max-w-md space-y-8">
-            <!-- Logo -->
-            <div class="flex justify-center">
-                <img class="h-12 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
-            </div>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-            <!-- Title -->
-            <h2 class="mt-6 text-center text-2xl font-bold text-gray-900 dark:text-gray-100">Sign in to your account</h2>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            background-color: #f8f9fc;
+        }
 
-            <!-- Session Status -->
+        .login-box {
+            width: 100%;
+            height: 100vh;
+            padding: 40px 60px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box img {
+            display: block;
+            height: 50px;
+            margin: 0 auto 20px auto;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #111;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fdfdfd;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4f46e5;
+            outline: none;
+        }
+
+        .error-message {
+            color: #e3342f;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            max-width: 400px;
+            margin: -10px auto 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            font-size: 13px;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 6px;
+        }
+
+        .forgot-link a {
+            font-size: 13px;
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 12px;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .register-link a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .status-message {
+            text-align: center;
+            color: green;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+
+            .form-group,
+            .checkbox-group,
+            button {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <div class="login-container">
+        <div class="login-box">
+            <img src="http://technyon.io/wp-content/uploads/2018/01/TECHNYON-BANNER-2022-site.png" alt="Your Company">
+
+            <h2>Sign in to your account</h2>
+
             @if (session('status'))
-                <div class="text-green-600 text-sm text-center">{{ session('status') }}</div>
+                <div class="status-message">{{ session('status') }}</div>
             @endif
 
-            <!-- Form -->
-            <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-6">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <!-- Email Address -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email address</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
-                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
                     @error('email')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="password" name="password" required autocomplete="current-password"
-                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
                     @error('password')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <!-- Remember Me & Forgot Password -->
-                <div class="flex items-center justify-between">
-                    <label for="remember_me" class="flex items-center">
-                        <input type="checkbox" id="remember_me" name="remember"
-                            class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                <div class="checkbox-group">
+                    <label for="remember_me">
+                        <input type="checkbox" id="remember_me" name="remember">
+                        Remember me
                     </label>
 
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
+                        <div class="forgot-link">
+                            <a href="{{ route('password.request') }}">Forgot your password?</a>
+                        </div>
                     @endif
                 </div>
 
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit"
-                        class="w-full flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                        Log in
-                    </button>
+                <div class="form-group">
+                    <button type="submit">Log in</button>
                 </div>
 
-                <!-- Register Link -->
-                <p class="mt-6 text-center text-sm text-gray-500">
-                    Not a member? <a href="{{ route('register') }}" class="font-semibold text-indigo-600 hover:text-indigo-500">Create an account</a>
-                </p>
+                <div class="register-link">
+                    Not a member?
+                    <a href="{{ route('register') }}">Create an account</a>
+                </div>
             </form>
         </div>
     </div>

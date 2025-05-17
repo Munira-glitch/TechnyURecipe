@@ -9,8 +9,6 @@
         <x-features />
         <x-carousel />
         <x-recipes />
-
-<x-footer />
-
-    </div>
+        <x-footer />
+   
 @endsection

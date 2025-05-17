@@ -1,16 +1,23 @@
 <?php
+
 use App\Http\Controllers\Api\RecipeApiController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExploreController;
 
-// Welcome Page (Publicly accessible)
+
+// Welcome Page 
 Route::get("/", [WelcomeController::class, "index"])->name("welcome");
+
+
+// About Page 
+Route::view("/about", "about")->name("about");
+
 
 // Dashboard - Only accessible to authenticated and verified users
 Route::get("/dashboard", [DashboardController::class, "index"])
@@ -19,13 +26,6 @@ Route::get("/dashboard", [DashboardController::class, "index"])
 
 // Authentication Middleware - Routes only accessible by logged-in users
 Route::middleware(["auth"])->group(function () {
-    // Profile Routes
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get("/profile", "edit")->name("profile.edit");
-        Route::patch("/profile", "update")->name("profile.update");
-        Route::delete("/profile", "destroy")->name("profile.destroy");
-    });
-    
 
     // Recipe Routes (CRUD)
     Route::resource("recipes", RecipeController::class);
@@ -34,17 +34,20 @@ Route::middleware(["auth"])->group(function () {
 
     // Category Routes (CRUD)
     Route::resource("categories", CategoryController::class);
+    //Like and comment 
+        Route::post('/recipes/{recipe}/like', [RecipeController::class, 'like'])->name('recipes.like');
+        // Route::post('/recipes/{recipe}/comment', [RecipeController::class, 'comment'])->name('recipes.comment');
+        Route::post('/recipes/{recipe}/comments', [CommentController::class, 'store'])->name('comments.store');
+        
 
-    // Like and Unlike Routes
-    Route::post("recipes/{recipe}/like", [LikeController::class, "store"])->name("recipes.like");
-    Route::delete("recipes/{recipe}/like", [LikeController::class, "destroy"])->name("recipes.unlike");
-
-    // Comment Routes
-    Route::post("recipes/{recipe}/comment", [CommentController::class, "store"])->name("recipes.comment");
+    
     
     //API Routes
     Route::get("/recipes/search/{query}", [RecipeApiController::class, 'search']);
     Route::get("/recipes/categories", [RecipeApiController::class, 'categories']);
+
+    //Explore controller
+    Route::get("/explore", [ExploreController::class, "index"])->name("recipes.explore");
     
 
 });

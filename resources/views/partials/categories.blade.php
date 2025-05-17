@@ -1,5 +1,8 @@
 <div class="container text-center my-5">
     <h2 class="mb-4" style="font-family: 'Poppins', sans-serif; font-size: 2.5rem; font-weight: 700;">Explore by Category</h2>
+    <p class="mt-4 text-lg text-gray-600">
+            Whether you're in the mood for breakfast, a quick snack, or a decadent dessert — we've got you covered.
+        </p>
 
     <div class="d-flex justify-content-center flex-wrap gap-3">
         @php

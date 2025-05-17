@@ -1,67 +1,61 @@
+<section class="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            What Our Users Are Saying
+        </h2>
+        <p class="mt-4 text-lg text-gray-600">
+            Join thousands who’ve transformed their meals with TechnyURecipe!
+        </p>
 
-<center><h2 class="mb-4" style="font-family: 'Poppins', sans-serif; font-size: 2.5rem; font-weight: 700;">Cook by the season</h2></center>
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div x-data="{ activeSlide: 0 }" class="relative mt-10">
+            @php
+                $testimonials = [
+                    [
+                        'name' => 'Sarah A.',
+                        'image' => 'https://randomuser.me/api/portraits/women/44.jpg',
+                        'text' => 'I’ve tried over 20 recipes from this site. The step-by-step guides are so easy to follow. My family loves it!',
+                    ],
+                    [
+                        'name' => 'Michael T.',
+                        'image' => 'https://randomuser.me/api/portraits/men/32.jpg',
+                        'text' => 'TechnyURecipe has completely changed the way I cook. Every dish feels like a restaurant-quality meal!',
+                    ],
+                    [
+                        'name' => 'Amina K.',
+                        'image' => 'https://randomuser.me/api/portraits/women/65.jpg',
+                        'text' => 'It’s like having a chef in your pocket. The ingredients are simple, and the meals are delicious!',
+                    ],
+                ];
+            @endphp
 
-  <div class="col">
-    <div class="card shadow-sm h-100 d-flex flex-column">
-      <a href="demo-ramadan-recipes.html">
-        <img src="https://images.unsplash.com/photo-1665989215795-f67f4723087d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="15 Best Recipes for Ramadan">
-      </a>
-      <div class="card-body d-flex flex-column">
-        <b><h3 class="card-title">15 Best Recipes for Ramadan</h3></b>
-        <p class="card-text flex-grow-1">Enjoy a collection of the most delicious and nutritious meals to keep you energized throughout the holy month.</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <a href="demo-ramadan-recipes.html" class="btn btn-sm btn-primary">View Recipes</a>
+            <div class="overflow-hidden relative h-60">
+                <template x-for="(testimonial, index) in {{ json_encode($testimonials) }}" :key="index">
+                    <div
+                        x-show="activeSlide === index"
+                        class="absolute inset-0 flex flex-col items-center justify-center text-center transition duration-700 ease-in-out"
+                        x-transition
+                    >
+                        <img :src="testimonial.image" class="w-20 h-20 rounded-full object-cover mb-4 border-4 border-primary" />
+                        <blockquote class="text-lg text-gray-700 italic px-4 max-w-xl">
+                            <span x-text="testimonial.text"></span>
+                        </blockquote>
+                        <cite class="mt-4 text-sm font-semibold text-primary">
+                            — <span x-text="testimonial.name"></span>
+                        </cite>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-8 flex justify-center gap-3">
+                <template x-for="(item, index) in {{ count($testimonials) }}">
+                    <button
+                        @click="activeSlide = index"
+                        class="w-3 h-3 rounded-full"
+                        :class="activeSlide === index ? 'bg-primary' : 'bg-gray-300'"
+                    ></button>
+                </template>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-
-
-  <div class="col">
-    <div class="card shadow-sm h-100 d-flex flex-column">
-      <a href="demo-eid-meals.html">
-        <img src="https://plus.unsplash.com/premium_photo-1723532605982-5b2cc9d9b28d?q=80&w=1460&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="10 Best Eid Meals">
-      </a>
-      <div class="card-body d-flex flex-column">
-        <b><h3 class="card-title">10 Best Eid Meals</h3></b>
-        <p class="card-text flex-grow-1">Celebrate Eid with these mouthwatering dishes that bring joy and festivity to your table.</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <a href="demo-eid-meals.html" class="btn btn-sm btn-primary">View Recipes</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="col">
-    <div class="card shadow-sm h-100 d-flex flex-column">
-      <a href="demo-refreshing-beverages.html">
-        <img src="https://images.unsplash.com/photo-1502816258913-1e15b75fe852?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="10 Best Refreshing Beverages">
-      </a>
-      <div class="card-body d-flex flex-column">
-        <b><h3 class="card-title">10 Best Refreshing Beverages</h3></b>
-        <p class="card-text flex-grow-1">Stay hydrated and refreshed with these delicious and cooling drinks, perfect for breaking your fast.</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <a href="demo-refreshing-beverages.html" class="btn btn-sm btn-primary">View Recipes</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<style>
-  .card {
-    display: flex;
-    flex-direction: column;
-  }
-  .card-body {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-text {
-    flex-grow: 1;
-  }
-</style>
+</section>

@@ -9,20 +9,19 @@ class Comment extends Model
 {
     use HasFactory;
 
-    // Attributes that are mass-assignable
     protected $fillable = [
-        'user_id',
-        'recipe_id',
-        'comment',
+        "user_id",
+        "recipe_id",
+        "comment", // keep this only if your DB uses this column name
     ];
 
-    // Relationship: Each comment belongs to one user
+    // Each comment belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relationship: Each comment is for a specific recipe
+    // Each comment belongs to a recipe
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);

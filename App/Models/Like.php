@@ -9,19 +9,18 @@ class Like extends Model
 {
     use HasFactory;
 
-    // Attributes that are mass-assignable
     protected $fillable = [
-        'user_id',
-        'recipe_id',
+        "user_id",
+        "recipe_id",
     ];
 
-    // Relationship: Each like belongs to one user
+    // Each like belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relationship: Each like is for a specific recipe
+    // Each like belongs to a recipe
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);

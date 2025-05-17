@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Like;
+use App\Models\Comment;
 
 class RecipeController extends Controller
 {
@@ -62,26 +64,33 @@ class RecipeController extends Controller
         return redirect()->route("dashboard")->with("success", "Recipe created successfully!");
     }
 
-    // // Display a single recipe
-    // public function show(Recipe $recipe)
-    // {
-    //     return view("recipes.show", compact("recipe"));
-    // }
+    //like and comment a recipe
+    public function like(Recipe $recipe)
+{
+    $exists = $recipe->likes()->where('user_id', auth()->id())->exists();
 
-    // public function edit(Recipe $recipe)
-    // {
-    //     // Ensure the user owns the recipe
-    //     if ($recipe->user_id !== Auth::id()) {
-    //         abort(403, "Unauthorized action.");
-    //     }
-    
-    //     $categories = Category::all();
-    
-    //     return view("recipes.edit", [
-    //         "recipe" => $recipe,
-    //         "categories" => $categories,
-    //     ]);
-    // }
+    if (!$exists) {
+        $recipe->likes()->create([
+            'user_id' => auth()->id(),
+        ]);
+    }
+
+    return back()->with('success', 'You liked the recipe!');
+}
+
+public function comment(Request $request, Recipe $recipe)
+{
+    $request->validate([
+        'comment' => 'required|string|max:500',
+    ]);
+
+    $recipe->comments()->create([
+        'user_id' => auth()->id(),
+        'body' => $request->input('comment'),
+    ]);
+
+    return back()->with('success', 'Comment added successfully.');
+}
 
     // Update a recipe
     public function update(Request $request, Recipe $recipe)
@@ -122,19 +131,6 @@ class RecipeController extends Controller
         return redirect()->route("dashboard")->with("success", "Recipe updated successfully!");
     }
 
-    // Delete a recipe
-    // public function destroy(Recipe $recipe)
-    // {
-    //     $this->authorize("delete", $recipe);
-
-    //     if ($recipe->image) {
-    //         Storage::disk("public")->delete($recipe->image);
-    //     }
-
-    //     $recipe->delete();
-
-    //     return redirect()->route("recipes.index")->with("success", "Recipe deleted successfully!");
-    // }
     public function destroy(Recipe $recipe)
 {
     // Optional: authorize deletion only by owner
