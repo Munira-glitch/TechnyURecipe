@@ -1,33 +1,22 @@
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-white px-4 shadow-sm">
+<header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom bg-white shadow-sm">
+  
+  <ul class="nav col-md-auto mb-2 justify-content-start mb-md-0">
+    <li><a href="{{ route('recipes.explore') }}" class="nav-link px-2 text-dark">Explore</a></li>
+    <li><a href="{{ route('about') }}" class="nav-link px-2 text-dark">About</a></li>
+  </ul>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><b><a href="{{ route('welcome') }}" class="nav-link px-2 link-dark">Home</a></li></b>
-        <li><b><a href="{{ route('recipes.index') }}" class="nav-link px-2 link-dark">Explore</a></li></b>
-        <li>
 
-        </li>
-    </ul>
-    <div class="col-md-3 mb-2 mb-md-0"><center>
-        <a href="{{ route('dashboard') }}" class="d-inline-flex align-items-center link-dark text-decoration-none fs-4 fw-bold">
-            🍽️ TechnyURecipe
-        </a></center>
-    </div>
+  <div class="mx-auto text-center">
+    <a href="{{ route('welcome') }}" class="text-decoration-none fs-4 fw-bold text-primary">
+      TechnyURecipe
+    </a>
+  </div>
 
-    
-    <div class="col-md-3 text-end">
-        <div class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ Auth::user()->name }}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                
-                <li>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="dropdown-item">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </div>
+  <div class="text-end">
+    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+      @csrf
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+  </div>
+
 </header>

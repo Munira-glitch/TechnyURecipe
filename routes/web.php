@@ -38,6 +38,10 @@ Route::middleware(["auth"])->group(function () {
         Route::post('/recipes/{recipe}/like', [RecipeController::class, 'like'])->name('recipes.like');
         // Route::post('/recipes/{recipe}/comment', [RecipeController::class, 'comment'])->name('recipes.comment');
         Route::post('/recipes/{recipe}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+        //edit recipe
+        Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
+
         
 
     

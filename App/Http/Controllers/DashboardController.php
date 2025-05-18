@@ -10,6 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        
         // Get recipes that belong to the currently logged-in user
         $recipes = Recipe::where("user_id", Auth::id())->latest()->get();
 

@@ -41,13 +41,23 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($recipes as $recipe)
-                <div class="card shadow-sm rounded-lg overflow-hidden border border-gray-200">
+                <div 
+                    class="card shadow-sm rounded-lg overflow-hidden border border-gray-200 cursor-pointer"
+                    data-bs-toggle="modal"
+                    data-bs-target="#recipeModal"
+                    data-title="{{ $recipe->title }}"
+                    data-description="{{ $recipe->description }}"
+                    data-ingredients="{{ implode(',', $recipe->ingredients) }}"
+                    data-instructions="{{ $recipe->instructions }}"
+                    data-category="{{ $recipe->category->name }}"
+                    data-image="{{ $recipe->image ? asset('storage/' . $recipe->image) : '' }}"
+                >
                     @if ($recipe->image)
                         <img src="{{ asset('storage/' . $recipe->image) }}" alt="{{ $recipe->title }}" class="w-full h-48 object-cover">
                     @endif
                     <div class="card-body p-4">
-                        <h5 class="card-title text-xl font-semibold text-gray-900">{{ $recipe->title }}</h5>
-                        <p class="card-text text-gray-600 mt-2">{{ Str::limit($recipe->description, 100) }}</p>
+                        <h1 class="card-title text-xl font-semibold text-gray-900">{{ $recipe->title }}</h1>
+                        <h1 class="card-text text-gray-600 mt-2">{{ Str::limit($recipe->description, 100) }}</h1>
                         <div class="text-sm text-gray-500 mt-2 flex justify-between">
                             <span><i class="bi bi-heart-fill text-red-500"></i> {{ $recipe->likes->count() }} Likes</span>
                             <span><i class="bi bi-chat-dots-fill text-indigo-500"></i> {{ $recipe->comments->count() }} Comments</span>
@@ -70,5 +80,70 @@
         </div>
     @endif
 </div>
+
+
+<div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="recipeModalLabel">Recipe Title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="" alt="" id="modalRecipeImage" class="img-fluid mb-3" style="max-height: 300px; width: 100%; object-fit: cover;">
+        <h1 id="modalRecipeDescription"></h1>
+        <strong><h6>Ingredients:</h6></strong>
+        <ul id="modalRecipeIngredients"></ul>
+        <strong><h1>Instructions:</h1></strong>
+        <p id="modalRecipeInstructions"></p>
+        <p><strong>Category:</strong> <span id="modalRecipeCategory"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <x-footer />
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var recipeModal = document.getElementById('recipeModal');
+
+        recipeModal.addEventListener('show.bs.modal', function (event) {
+            var card = event.relatedTarget;
+
+            var title = card.getAttribute('data-title');
+            var description = card.getAttribute('data-description');
+            var ingredients = card.getAttribute('data-ingredients').split(',');
+            var instructions = card.getAttribute('data-instructions');
+            var category = card.getAttribute('data-category');
+            var image = card.getAttribute('data-image');
+
+            recipeModal.querySelector('.modal-title').textContent = title;
+            recipeModal.querySelector('#modalRecipeDescription').textContent = description;
+            recipeModal.querySelector('#modalRecipeInstructions').textContent = instructions;
+            recipeModal.querySelector('#modalRecipeCategory').textContent = category;
+
+            var imgElem = recipeModal.querySelector('#modalRecipeImage');
+            if (image) {
+                imgElem.src = image;
+                imgElem.style.display = 'block';
+            } else {
+                imgElem.style.display = 'none';
+            }
+
+            var ingredientsList = recipeModal.querySelector('#modalRecipeIngredients');
+            ingredientsList.innerHTML = '';
+            ingredients.forEach(function (ingredient) {
+                var li = document.createElement('li');
+                li.textContent = ingredient.trim();
+                ingredientsList.appendChild(li);
+            });
+        });
+    });
+</script>
+
 @endsection

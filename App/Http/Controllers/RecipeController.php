@@ -30,9 +30,20 @@ class RecipeController extends Controller
     // Show form to create a new recipe
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::all(); 
         return view("recipes.create", compact("categories"));
     }
+    public function edit(Recipe $recipe)
+{
+
+    if ($recipe->user_id !== Auth::id()) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    $categories = Category::all();
+
+    return view('recipes.edit', compact('recipe', 'categories'));
+}
     
 
     public function store(Request $request)

@@ -1,41 +1,18 @@
-<div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+<div class="relative bg-white rounded-lg shadow-lg overflow-hidden mb-10">
+ 
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1706262220689-db429fbec365?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Cooking background" class="w-full h-full object-cover opacity-20">
+        <div class="absolute inset-0 bg-gradient-to-r from-white/90 to-white/70"></div> <!-- Subtle overlay -->
+    </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white shadow-md rounded-2xl p-6">
-                <h2 class="text-lg font-semibold text-gray-700">Total Recipes</h2>
-                <p class="text-2xl font-bold text-indigo-600 mt-2">{{ $totalRecipes }}</p>
-            </div>
-            <div class="bg-white shadow-md rounded-2xl p-6">
-                <h2 class="text-lg font-semibold text-gray-700">Total Likes</h2>
-                <p class="text-2xl font-bold text-pink-600 mt-2">{{ $totalLikes }}</p>
-            </div>
-            <div class="bg-white shadow-md rounded-2xl p-6">
-                <h2 class="text-lg font-semibold text-gray-700">Total Comments</h2>
-                <p class="text-2xl font-bold text-green-600 mt-2">{{ $totalComments }}</p>
-            </div>
-            <div class="bg-white shadow-md rounded-2xl p-6">
-                <h2 class="text-lg font-semibold text-gray-700">Your Followers</h2>
-                <p class="text-2xl font-bold text-yellow-500 mt-2">Coming Soon</p>
-            </div>
-        </div>
-
-        <!-- Recent Recipes -->
-        <div class="bg-white shadow-md rounded-2xl p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Recent Recipes</h2>
-            @forelse($recentRecipes as $recipe)
-                <div class="flex items-center justify-between border-b border-gray-200 py-3">
-                    <div>
-                        <h3 class="text-md font-medium text-gray-700">{{ $recipe->title }}</h3>
-                        <p class="text-sm text-gray-500">{{ \Illuminate\Support\Str::limit($recipe->description, 60) }}</p>
-                    </div>
-                    <a href="{{ route('recipes.show', $recipe) }}" class="text-indigo-500 hover:underline">View</a>
-                </div>
-            @empty
-                <p class="text-gray-500">You haven't added any recipes yet.</p>
-            @endforelse
-        </div>
+    <div class="relative z-10 p-10">
+        <h1 class="text-4xl font-extrabold text-blue-800 mb-3">Welcome back, {{ Auth::user()->name }}!</h1>
+        <p class="text-lg text-blue-900 max-w-xl">
+            Ready to cook up something amazing? Manage your recipes, explore new ideas, and share your culinary creations with the world.
+        </p>
+        <a href="{{ route('recipes.create') }}" 
+           class="inline-block mt-6 bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+           Add New Recipe
+        </a>
     </div>
 </div>

@@ -21,44 +21,44 @@
     <div class="mb-5">
         <h4 class="text-xl font-semibold text-gray-700 mb-3">TechnyURecipe Recipes</h4>
         <div class="row">
-            @foreach($userRecipes as $recipe)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        @if($recipe->image)
-                            <img src="{{ asset('storage/' . $recipe->image) }}" class="card-img-top" alt="{{ $recipe->title }}">
-                        @endif
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $recipe->title }}</h5>
-                            <p class="card-text">{{ Str::limit($recipe->description, 100) }}</p>
-                        </div>
-                        <div class="card-footer bg-light p-2 border-top">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }} Likes</span>
-                                <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ $recipe->comments->count() }} Comments</span>
-                            </div>
-                            @auth
-                                <form action="{{ route('recipes.like', $recipe) }}" method="POST" class="mt-2">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Like</button>
-                                </form>
+        @foreach($userRecipes as $recipe)
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            @if($recipe->image)
+                <img src="{{ asset('storage/' . $recipe->image) }}" class="card-img-top" alt="{{ $recipe->title }}">
+            @endif
+            <div class="card-body">
+                <h5 class="card-title">{{ $recipe->title }}</h5>
+                <p class="card-text">{{ Str::limit($recipe->description, 100) }}</p>
+            </div>
 
-                                <form action="{{ route('comments.store', $recipe->id) }}" method="POST" class="mt-2">
-                                    @csrf
-                                    <input type="text" name="comment" class="form-control" placeholder="Leave a comment..." required>
-                                    <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Comment</button>
-                                </form>
-                            @else
-                                <p class="text-muted mt-2">Login to like or comment.</p>
-                            @endauth
-                        </div>
-                    </div>
+            <div class="card-footer bg-light p-2 border-top">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }} Likes</span>
+                    <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ $recipe->comments->count() }} Comments</span>
                 </div>
-            @endforeach
-        </div>
 
-        <div class="mt-4">
-            {{ $userRecipes->links() }}
+                @auth
+                    <!-- Like Button -->
+                    <form action="{{ route('recipes.like', $recipe) }}" method="POST" class="mt-2">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Like</button>
+                    </form>
+
+                    <!-- Comment Form -->
+                    <form action="{{ route('comments.store', $recipe->id) }}" method="POST" class="mt-2">
+                        @csrf
+                        <input type="text" name="comment" class="form-control" placeholder="Leave a comment..." required>
+                        <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Comment</button>
+                    </form>
+                @else
+                    <p class="text-muted mt-2">Login to like or comment.</p>
+                @endauth
+            </div>
         </div>
+    </div>
+@endforeach
+
     </div>
 
     <hr class="my-5">
@@ -85,8 +85,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <img src="{{ $meal['image'] }}" class="img-fluid mb-3" alt="{{ $meal['title'] }}">
-                                    <p><strong>Servings:</strong> {{ $meal['servings'] ?? 'N/A' }}</p>
-                                    <p><strong>Ready in:</strong> {{ $meal['readyInMinutes'] ?? 'N/A' }} minutes</p>
+                                    <p><strong>Servings:</strong> {{ $meal['servings'] }}</p>
+                                    <p><strong>Ready in:</strong> {{ $meal['readyInMinutes'] }} minutes</p>
                                     @if(isset($meal['summary']))
                                         <p><strong>Summary:</strong> {!! strip_tags($meal['summary']) !!}</p>
                                     @endif

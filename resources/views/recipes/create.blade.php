@@ -30,14 +30,18 @@
         </div>
 
         <div>
-            <label for="category_id" class="form-label font-semibold">Category</label>
-            <select name="category_id" id="category_id" class="form-select" required>
-                <option value="">Select a Category</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-        </div>
+    <label for="category_id" class="form-label font-semibold">Category</label>
+    <select name="category_id" id="category_id" class="form-select" required>
+        <option value="">Select a Category</option>
+        @foreach ($categories as $category)
+            @php
+                $formattedName = ucfirst(strtolower($category->name));
+            @endphp
+            <option value="{{ $category->id }}">{{ $formattedName }}</option>
+        @endforeach
+    </select>
+</div>
+
 
         <div>
             <label for="image" class="form-label font-semibold">Recipe Image</label>
