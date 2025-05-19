@@ -44,7 +44,7 @@ class Recipe extends Model
     // Relationship: Recipe has many comments
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->with('user');
     }
 
     // Helper: Check if a recipe is liked by a user

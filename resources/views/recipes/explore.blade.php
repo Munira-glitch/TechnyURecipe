@@ -4,89 +4,104 @@
 
 @section('content')
 <div class="container mt-5">
-    <x-navbar />
+    <x-explorenavbar />
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded shadow-sm mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="{{ url('/') }}">Recipe Explorer</a>
-            <form class="d-flex ms-auto" method="GET" action="{{ route('recipes.explore') }}">
-                <input class="form-control me-2" type="search" placeholder="Search recipes..." name="query" value="{{ request('query') }}">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+   
 
-    <h2 class="text-3xl font-bold mb-4">Explore Recipes</h2>
-
-    <div class="mb-5">
-        <h4 class="text-xl font-semibold text-gray-700 mb-3">TechnyURecipe Recipes</h4>
+    <h2 class="fs-2 fw-bold mb-4">Explore Recipes</h2>
+    <section class="mb-5">
+        <h4 class="fs-4 fw-semibold text-secondary mb-3">TechnyURecipe Recipes</h4>
         <div class="row">
-        @foreach($userRecipes as $recipe)
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            @if($recipe->image)
-                <img src="{{ asset('storage/' . $recipe->image) }}" class="card-img-top" alt="{{ $recipe->title }}">
-            @endif
-            <div class="card-body">
-                <h5 class="card-title">{{ $recipe->title }}</h5>
-                <p class="card-text">{{ Str::limit($recipe->description, 100) }}</p>
-            </div>
-
-            <div class="card-footer bg-light p-2 border-top">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }} Likes</span>
-                    <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ $recipe->comments->count() }} Comments</span>
-                </div>
-
-                @auth
-                    <!-- Like Button -->
-                    <form action="{{ route('recipes.like', $recipe) }}" method="POST" class="mt-2">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-danger">Like</button>
-                    </form>
-
-                    <!-- Comment Form -->
-                    <form action="{{ route('comments.store', $recipe->id) }}" method="POST" class="mt-2">
-                        @csrf
-                        <input type="text" name="comment" class="form-control" placeholder="Leave a comment..." required>
-                        <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Comment</button>
-                    </form>
-                @else
-                    <p class="text-muted mt-2">Login to like or comment.</p>
-                @endauth
-            </div>
-        </div>
-    </div>
-@endforeach
-
-    </div>
-
-    <hr class="my-5">
-
-    <div>
-        <h4 class="text-xl font-semibold text-gray-700 mb-3">More Recipes</h4>
-        <div class="row">
-            @forelse($externalRecipes as $meal)
+            @foreach($userRecipes as $recipe)
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#mealModal{{ $meal['id'] }}">
-                        <img src="{{ $meal['image'] }}" class="card-img-top" alt="{{ $meal['title'] }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $meal['title'] }}</h5>
+                    <div class="card h-100 shadow-sm" style="cursor:pointer; max-height: 320px;" data-bs-toggle="modal" data-bs-target="#userRecipeModal{{ $recipe->id }}">
+                        @if($recipe->image)
+                            <img src="{{ asset('storage/' . $recipe->image) }}" class="card-img-top" style="height: 180px; object-fit: cover;" alt="{{ $recipe->title }}">
+                        @endif
+                        <div class="card-body py-2" style="min-height: 100px;">
+                            <h6 class="card-title mb-1 fw-bold text-truncate">{{ $recipe->title }}</h6>
+                            <p class="card-text text-muted small" style="max-height: 45px; overflow: hidden;">{{ Str::limit($recipe->description, 70) }}</p>
+                        </div>
+                        <div class="card-footer bg-light d-flex justify-content-between align-items-center small">
+                            <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }}</span>
+                            <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ $recipe->comments->count() }}</span>
                         </div>
                     </div>
 
-                    <!-- Modal -->
+                    <div class="modal fade" id="userRecipeModal{{ $recipe->id }}" tabindex="-1" aria-labelledby="userRecipeModalLabel{{ $recipe->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ $recipe->title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @if($recipe->image)
+                                        <img src="{{ asset('storage/' . $recipe->image) }}" class="img-fluid rounded mb-3" alt="{{ $recipe->title }}">
+                                    @endif
+
+                                    <p><strong>Description:</strong> {{ $recipe->description }}</p>
+                                    <p><strong>Ingredients:</strong> {{ is_array($recipe->ingredients) ? implode(', ', $recipe->ingredients) : $recipe->ingredients }}</p>
+                                    <p><strong>Instructions:</strong> {!! nl2br(e($recipe->instructions)) !!}</p>
+
+                                    <hr>
+                                    <h6 class="fw-bold mb-2">Comments ({{ $recipe->comments->count() }}):</h6>
+                                    <div class="mb-3" style="max-height: 200px; overflow-y: auto;">
+                                        @forelse($recipe->comments as $comment)
+                                            <div class="mb-2">
+                                                <strong>{{ $comment->user->name ?? 'Anonymous' }}:</strong>
+                                                <span>{{ $comment->comment }}</span>
+                                            </div>
+                                        @empty
+                                            <p class="text-muted">No comments yet.</p>
+                                        @endforelse
+                                    </div>
+
+                                    @auth
+                                        <form action="{{ route('comments.store', $recipe->id) }}" method="POST" class="mt-3">
+                                            @csrf
+                                            <div class="mb-2">
+                                                <input type="text" name="comment" class="form-control" placeholder="Leave a comment..." required>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
+                                        </form>
+                                    @else
+                                        <p class="text-muted mt-3">Please <a href="{{ route('login') }}">login</a> to comment.</p>
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        {{ $userRecipes->links() }}
+    </section>
+
+    <section>
+        <h4 class="fs-4 fw-semibold text-secondary mb-3">More Recipes</h4>
+        <div class="row">
+            @forelse($externalRecipes as $meal)
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#mealModal{{ $meal['id'] }}">
+                        <img src="{{ $meal['image'] }}" class="card-img-top" alt="{{ $meal['title'] }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">{{ $meal['title'] }}</h5>
+                        </div>
+                    </div>
+
+                   
                     <div class="modal fade" id="mealModal{{ $meal['id'] }}" tabindex="-1" aria-labelledby="mealModalLabel{{ $meal['id'] }}" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="mealModalLabel{{ $meal['id'] }}">{{ $meal['title'] }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
                                     <img src="{{ $meal['image'] }}" class="img-fluid mb-3" alt="{{ $meal['title'] }}">
-                                    <p><strong>Servings:</strong> {{ $meal['servings'] }}</p>
-                                    <p><strong>Ready in:</strong> {{ $meal['readyInMinutes'] }} minutes</p>
+                                    <p><strong>Servings:</strong> {{ $meal['servings'] ?? 'N/A' }}</p>
+                                    <p><strong>Ready in:</strong> {{ $meal['readyInMinutes'] ?? 'N/A' }} minutes</p>
                                     @if(isset($meal['summary']))
                                         <p><strong>Summary:</strong> {!! strip_tags($meal['summary']) !!}</p>
                                     @endif
@@ -96,9 +111,9 @@
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No external recipes found.</p>
+                <p class="text-muted">No extra recipes found.</p>
             @endforelse
         </div>
-    </div>
+    </section>
 </div>
 @endsection

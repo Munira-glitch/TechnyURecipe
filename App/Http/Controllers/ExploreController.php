@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Models\Recipe;
 
@@ -12,16 +13,19 @@ class ExploreController extends Controller
     {
         $query = $request->input('query');
 
-        // User-created recipes with pagination (12 per page)
-        $userRecipes = Recipe::with('likes', 'comments')
-            ->when($query, function ($q) use ($query) {
-                $q->where('title', 'like', "%$query%")
-                  ->orWhere('description', 'like', "%$query%");
-            })
+        
+        $userRecipes = Recipe::with('likes', 'comments.user')
+        ->when($query, function ($q) use ($query) {
+            $driver = DB::connection()->getDriverName();
+            $likeOperator = $driver === 'pgsql' ? 'ilike' : 'like';
+    
+            $q->where('title', $likeOperator, "%$query%")
+              ->orWhere('description', $likeOperator, "%$query%");
+        })
             ->latest()
             ->paginate(12);
 
-        // Recipes from Spoonacular API (12 total)
+        // Recipes from Spoonacular API
         $apiKey = env('SPOONACULAR_API_KEY');
 
         $endpoint = $query
