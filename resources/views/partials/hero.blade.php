@@ -9,7 +9,7 @@
                 Explore a world of homemade meals, international dishes, and mouthwatering desserts crafted by our community.
             </p>
             <div class="mt-6 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-                <a href="{{ route('recipes.index') }}" class="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow hover:bg-primary/90 transition">
+                <a href="{{ route('recipes.explore') }}" class="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow hover:bg-primary/90 transition">
                     Browse Recipes
                 </a>
                 <a href="{{ route('register') }}" class="inline-block px-6 py-3 border border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition">

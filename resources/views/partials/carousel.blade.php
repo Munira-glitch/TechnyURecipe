@@ -14,7 +14,7 @@
           <div class="carousel-caption text-start">
             <h1>Explore a World of Flavors.</h1>
             <p>Discover new and exciting recipes from chefs and home cooks around the world.</p>
-            <p><a class="btn btn-lg btn-primary" href="{{ route('recipes.index') }}">Explore Recipes</a></p>
+            <p><a class="btn btn-lg btn-primary" href="{{ route('recipes.explore') }}">Explore Recipes</a></p>
           </div>
         </div>
       </div>

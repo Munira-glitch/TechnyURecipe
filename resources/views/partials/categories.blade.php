@@ -3,7 +3,7 @@
     <p class="mt-4 text-lg text-gray-600">
             Whether you're in the mood for breakfast, a quick snack, or a decadent dessert — we've got you covered.
         </p>
-
+<br>
     <div class="d-flex justify-content-center flex-wrap gap-3">
         @php
             $categories = [

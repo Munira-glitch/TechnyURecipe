@@ -5,7 +5,17 @@
 @section("content")
     <h1>{{ $recipe->title }}</h1>
 
-    <p><strong>Category:</strong> {{ $recipe->category->name ?? "Uncategorized" }}</p>
+    <p>
+        <strong>Category:</strong>
+        @if($recipe->category)
+            <a href="{{ route('categories.show', ['category' => strtolower($recipe->category->name)]) }}">
+                {{ $recipe->category->name }}
+            </a>
+        @else
+            Uncategorized
+        @endif
+    </p>
+
     <p><strong>Description:</strong> {{ $recipe->description }}</p>
 
     <h4>Ingredients:</h4>

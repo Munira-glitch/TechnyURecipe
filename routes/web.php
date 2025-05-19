@@ -11,8 +11,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExploreController;
 
 
+
+
 // Welcome Page 
 Route::get("/", [WelcomeController::class, "index"])->name("welcome");
+
 
 
 // About Page 
@@ -33,7 +36,8 @@ Route::middleware(["auth"])->group(function () {
 
 
     // Category Routes (CRUD)
-    Route::resource("categories", CategoryController::class);
+    Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
     //Like and comment 
         Route::post('/recipes/{recipe}/like', [RecipeController::class, 'like'])->name('recipes.like');
         // Route::post('/recipes/{recipe}/comment', [RecipeController::class, 'comment'])->name('recipes.comment');
