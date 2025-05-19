@@ -33,16 +33,10 @@ class CategoryController extends Controller
     }
 
     // Display a single category and its recipes
-    public function show($categorySlug)
+    public function show(Category $category)
     {
-        // Find the category by name (case insensitive)
-        $category = Category::whereRaw('LOWER(name) = ?', [strtolower($categorySlug)])->firstOrFail();
-
-        // Load recipes in that category (with user and category eager loaded), paginate if you want
-        $recipes = $category->recipes()->with('user', 'category')->paginate(10);
-
-        // Return to your explore or category view passing the category and its recipes
-        return view('categories.show', compact('category', 'recipes'));
+        $recipes = $category->recipes()->paginate(10);
+        return view("categories.show", compact("category", "recipes"));
     }
 
     // Show form to edit a category

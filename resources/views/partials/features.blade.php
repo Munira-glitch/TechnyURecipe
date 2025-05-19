@@ -10,24 +10,25 @@
 <div class="row mb-2">
   @foreach($featuredRecipes as $recipe)
     <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 d-flex">
-        <div class="col p-4 d-flex flex-column flex-grow-1">
-          <strong><h3 class="mb-0 font-weight-bold">{{ $recipe['title'] }}</h3></strong>
-          <div class="mb-1 text-body-secondary">{{ now()->format('M d') }}</div>
-          <p class="card-text flex-grow-1">
-            {{ \Illuminate\Support\Str::limit(strip_tags($recipe['summary'] ?? 'No description available.'), 150) }}
-          </p>
-          <a href="https://spoonacular.com/recipes/{{ Str::slug($recipe['title']) }}-{{ $recipe['id'] }}" target="_blank" class="icon-link gap-1 icon-link-hover stretched-link view-recipe mt-auto">
-            View Recipe
-          </a>
+      <a href="https://spoonacular.com/recipes/{{ Str::slug($recipe['title']) }}-{{ $recipe['id'] }}" target="_blank" class="text-decoration-none text-dark">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 d-flex">
+          <div class="col p-4 d-flex flex-column flex-grow-1">
+            <strong><h3 class="mb-0 font-weight-bold">{{ $recipe['title'] }}</h3></strong>
+            <div class="mb-1 text-body-secondary">{{ now()->format('M d') }}</div>
+            <p class="card-text flex-grow-1">
+              {{ \Illuminate\Support\Str::limit(strip_tags($recipe['summary'] ?? 'No description available.'), 150) }}
+            </p>
+            <span class="view-recipe mt-auto">View Recipe</span>
+          </div>
+          <div class="col-auto d-none d-lg-block">
+            <img src="{{ $recipe['image'] }}" alt="{{ $recipe['title'] }}" width="250" height="250" style="object-fit: cover;">
+          </div>
         </div>
-        <div class="col-auto d-none d-lg-block">
-          <img src="{{ $recipe['image'] }}" alt="{{ $recipe['title'] }}" width="250" height="250" style="object-fit: cover;">
-        </div>
-      </div>
+      </a>
     </div>
   @endforeach
 </div>
+
 
 <style>
   .view-recipe {

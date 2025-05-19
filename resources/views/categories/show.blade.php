@@ -5,17 +5,7 @@
 @section("content")
     <h1>{{ $recipe->title }}</h1>
 
-    <p>
-        <strong>Category:</strong>
-        @if($recipe->category)
-            <a href="{{ route('categories.show', ['category' => strtolower($recipe->category->name)]) }}">
-                {{ $recipe->category->name }}
-            </a>
-        @else
-            Uncategorized
-        @endif
-    </p>
-
+    <p><strong>Category:</strong> {{ $recipe->category->name ?? "Uncategorized" }}</p>
     <p><strong>Description:</strong> {{ $recipe->description }}</p>
 
     <h4>Ingredients:</h4>
@@ -34,7 +24,7 @@
 
     <hr>
 
-    <!-- Like/Unlike Form -->
+   
     <div class="mb-3">
         @if($recipe->isLikedBy(auth()->user()))
             <form action="{{ route('recipes.unlike', $recipe) }}" method="POST">
@@ -50,7 +40,7 @@
         @endif
     </div>
 
-    <!-- Comments Section -->
+    
     <h4>Comments ({{ $recipe->comments->count() }})</h4>
 
     @auth

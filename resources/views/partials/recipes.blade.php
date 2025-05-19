@@ -45,8 +45,7 @@
                     </div>
                 </template>
             </div>
-
-            <!-- Controls -->
+            
             <div class="mt-8 flex justify-center gap-3">
                 <template x-for="(item, index) in {{ count($testimonials) }}">
                     <button

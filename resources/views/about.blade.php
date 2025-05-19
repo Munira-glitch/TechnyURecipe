@@ -37,7 +37,7 @@
 
     
         <div class="mt-16 text-center">
-            <a href="{{ route('recipes.index') }}" class="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow hover:bg-primary/90 transition">
+            <a href="{{ route('recipes.explore') }}" class="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow hover:bg-primary/90 transition">
                 Start Exploring Recipes
             </a>
         </div>
