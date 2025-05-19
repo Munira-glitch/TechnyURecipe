@@ -30,7 +30,7 @@ class RecipeController extends Controller
     // Show form to create a new recipe
     public function create()
     {
-        $categories = Category::all(); 
+        $categories = \App\Models\Category::all(); 
         return view("recipes.create", compact("categories"));
     }
     public function edit(Recipe $recipe)
