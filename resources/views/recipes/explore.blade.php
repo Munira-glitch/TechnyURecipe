@@ -6,8 +6,6 @@
 <div class="container mt-5">
     <x-explorenavbar />
 
-   
-
     <h2 class="fs-2 fw-bold mb-4">Explore Recipes</h2>
     <section class="mb-5">
         <h4 class="fs-4 fw-semibold text-secondary mb-3">TechnyURecipe Recipes</h4>
@@ -23,7 +21,16 @@
                             <p class="card-text text-muted small" style="max-height: 45px; overflow: hidden;">{{ Str::limit($recipe->description, 70) }}</p>
                         </div>
                         <div class="card-footer bg-light d-flex justify-content-between align-items-center small">
-                            <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }}</span>
+                            @auth
+                                <form action="{{ route('recipes.like', $recipe) }}" method="POST" class="m-0 p-0">
+                                    @csrf
+                                    <button type="submit" class="btn p-0 border-0 bg-transparent">
+                                        <i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }}
+                                    </button>
+                                </form>
+                            @else
+                                <span><i class="bi bi-heart-fill text-danger"></i> {{ $recipe->likes->count() }}</span>
+                            @endauth
                             <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ $recipe->comments->count() }}</span>
                         </div>
                     </div>
@@ -39,6 +46,15 @@
                                     @if($recipe->image)
                                         <img src="{{ asset('storage/' . $recipe->image) }}" class="img-fluid rounded mb-3" alt="{{ $recipe->title }}">
                                     @endif
+
+                                    @auth
+                                        <form action="{{ route('recipes.like', $recipe) }}" method="POST" class="mb-3">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-heart-fill"></i> Like ({{ $recipe->likes->count() }})
+                                            </button>
+                                        </form>
+                                    @endauth
 
                                     <p><strong>Description:</strong> {{ $recipe->description }}</p>
                                     <p><strong>Ingredients:</strong> {{ is_array($recipe->ingredients) ? implode(', ', $recipe->ingredients) : $recipe->ingredients }}</p>
@@ -90,7 +106,6 @@
                         </div>
                     </div>
 
-                   
                     <div class="modal fade" id="mealModal{{ $meal['id'] }}" tabindex="-1" aria-labelledby="mealModalLabel{{ $meal['id'] }}" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
@@ -111,7 +126,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No extra recipes found.</p>
+                <p class="text-muted">No recipes found.</p>
             @endforelse
         </div>
     </section>
